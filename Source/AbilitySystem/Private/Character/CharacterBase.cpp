@@ -35,6 +35,33 @@ void ACharacterBase::BeginPlay()
 	
 }
 
+void ACharacterBase::GiveDefaultAbilities()
+{
+	check(AbilitySystemComponent);
+	if(!HasAuthority()) return;
+	
+	for(const TSubclassOf<UGameplayAbility> AbilityClass : DefaultAbilities)
+	{
+		const FGameplayAbilitySpec AbilitySpec(AbilityClass, 1);
+		AbilitySystemComponent->GiveAbility(AbilitySpec);
+	}
+}
+
+void ACharacterBase::InitDefaultAttributes() const
+{
+	if(!AbilitySystemComponent || !DefaultAttributeEffect) { return; }
+	
+	FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
+	EffectContext.AddSourceObject(this);
+
+	const FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(DefaultAttributeEffect, 1.f, EffectContext);
+
+	if(SpecHandle.IsValid())
+	{
+		AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());			
+	}
+}
+
 // Called every frame
 void ACharacterBase::Tick(float DeltaTime)
 {

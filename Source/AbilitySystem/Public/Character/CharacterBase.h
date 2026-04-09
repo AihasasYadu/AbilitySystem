@@ -18,12 +18,21 @@ class ABILITYSYSTEM_API ACharacterBase : public ACharacter, public IAbilitySyste
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	
+	void GiveDefaultAbilities();
+	void InitDefaultAttributes() const;
 		
 	UPROPERTY()
 	TObjectPtr<UGameAbilitySystemComponent> AbilitySystemComponent;
 
 	UPROPERTY()
 	TObjectPtr<UAttributeSetBase> AttributeSet;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Ability")
+	TArray<TSubclassOf<UGameplayAbility>> DefaultAbilities;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Ability")
+	TSubclassOf<UGameplayEffect> DefaultAttributeEffect;
 	
 public:	
 	// Sets default values for this character's properties
