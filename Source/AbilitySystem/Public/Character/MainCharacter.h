@@ -4,6 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "CharacterBase.h"
+#include "InputActionValue.h"
+#include "AbilitySystem/AbilitySystemPlayerController.h"
+#include "Camera/CameraComponent.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "MainCharacter.generated.h"
 
 UCLASS()
@@ -18,6 +22,10 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	void Move(const FInputActionValue& Value);
+	void UseAbility(const FInputActionValue& Value);
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	FGameplayTag LeapSlamAbilityTag;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	USpringArmComponent* CameraBoom;
@@ -30,6 +38,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* MoveAction;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* UseAbilityAction;
 
 public:
 	// Sets default values for this character's properties

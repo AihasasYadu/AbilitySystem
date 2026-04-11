@@ -18,4 +18,5 @@ protected:
 public:
 	// Sets default values for this character's properties
 	AEnemyCharacter();
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 };

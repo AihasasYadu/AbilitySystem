@@ -40,11 +40,8 @@ void ACharacterBase::GiveDefaultAbilities()
 	check(AbilitySystemComponent);
 	if(!HasAuthority()) return;
 	
-	for(const TSubclassOf<UGameplayAbility> AbilityClass : DefaultAbilities)
-	{
-		const FGameplayAbilitySpec AbilitySpec(AbilityClass, 1);
-		AbilitySystemComponent->GiveAbility(AbilitySpec);
-	}
+	const FGameplayAbilitySpec AbilitySpec(CharacterAbility, 1);
+	AbilitySystemComponent->GiveAbility(AbilitySpec);
 }
 
 void ACharacterBase::InitDefaultAttributes() const

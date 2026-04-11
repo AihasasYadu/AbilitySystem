@@ -15,6 +15,21 @@ AEnemyCharacter::AEnemyCharacter()
 	AttributeSet = CreateDefaultSubobject<UAttributeSetBase>("AttributeSet");
 }
 
+float AEnemyCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent,
+	class AController* EventInstigator, AActor* DamageCauser)
+{
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(
+			-1,
+			1.0f,
+			FColor::Yellow,
+			FString::Printf(TEXT("Damage Dealt: %.1f"), DamageAmount)
+		);
+	}
+	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+}
+
 // Called when the game starts or when spawned
 void AEnemyCharacter::BeginPlay()
 {

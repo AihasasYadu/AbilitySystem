@@ -6,6 +6,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Player/GamePlayerState.h"
+#include "GameplayTagContainer.h"
 
 
 // Sets default values
@@ -60,22 +61,29 @@ void AMainCharacter::BeginPlay()
 
 void AMainCharacter::Move(const FInputActionValue& Value)
 {
-	const FVector2D MovementVector = Value.Get<FVector2D>();
-
-	if (Controller == nullptr)
+	if (Controller != nullptr)
 	{
-		return;
+		const FVector2D MovementVector = Value.Get<FVector2D>();
+
+		// Use camera/controller yaw only, ignore pitch/roll
+		const FRotator Rotation = Controller->GetControlRotation();
+		const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
+
+		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+		const FVector RightDirection   = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+
+		AddMovementInput(ForwardDirection, MovementVector.Y);
+		AddMovementInput(RightDirection, MovementVector.X);
 	}
+}
 
-	// Use camera/controller yaw only, ignore pitch/roll
-	const FRotator Rotation = Controller->GetControlRotation();
-	const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
-
-	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-	const FVector RightDirection   = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-
-	AddMovementInput(ForwardDirection, MovementVector.Y);
-	AddMovementInput(RightDirection, MovementVector.X);
+void AMainCharacter::UseAbility(const FInputActionValue& Value)
+{
+	if (AbilitySystemComponent != nullptr)
+	{
+		const FGameplayTagContainer GameplayTags = LeapSlamAbilityTag.GetSingleTagContainer();
+		AbilitySystemComponent->TryActivateAbilitiesByTag(GameplayTags, true);
+	}
 }
 
 // Called every frame
@@ -94,6 +102,10 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 		if (MoveAction)
 		{
 			EnhancedInput->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AMainCharacter::Move);
+		}
+		if (UseAbilityAction)
+		{
+			EnhancedInput->BindAction(UseAbilityAction, ETriggerEvent::Triggered, this, &AMainCharacter::UseAbility);
 		}
 	}
 }

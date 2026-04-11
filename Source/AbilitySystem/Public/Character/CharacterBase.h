@@ -29,7 +29,7 @@ protected:
 	TObjectPtr<UAttributeSetBase> AttributeSet;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Ability")
-	TArray<TSubclassOf<UGameplayAbility>> DefaultAbilities;
+	TSubclassOf<UGameplayAbility> CharacterAbility;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Ability")
 	TSubclassOf<UGameplayEffect> DefaultAttributeEffect;
