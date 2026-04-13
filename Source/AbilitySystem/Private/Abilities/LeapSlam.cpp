@@ -4,6 +4,7 @@
 #include "Abilities/LeapArc.h"
 #include "Abilities/WaitCharacterLanded.h"
 #include "Abilities/Tasks/AbilityTask_WaitDelay.h"
+#include "Character/CharacterBase.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -127,14 +128,15 @@ void ULeapSlam::OnRecoveryDelayFinished()
 
 void ULeapSlam::PerformDamageTrace()
 {
-	ACharacter* Character = Cast<ACharacter>(GetAvatarActorFromActorInfo());
+	ACharacterBase* Character = Cast<ACharacterBase>(GetAvatarActorFromActorInfo());
 	if (!Character)
 	{
 		return;
 	}
-
+	
+	const float AttackSpeed = Character->GetAttributeSet()->GetAttackSpeed();
 	const FVector Start = Character->GetActorLocation() + Character->GetActorForwardVector() * 60.f + FVector(0.f, 0.f, 50.f);
-	const FVector End = Start + Character->GetActorForwardVector() * DamageTraceLength;
+	const FVector End = Start + Character->GetActorForwardVector() * DamageTraceLength * AttackSpeed;
 
 	TArray<FHitResult> Hits;
 	TArray<AActor*> ActorsToIgnore;
@@ -144,7 +146,7 @@ void ULeapSlam::PerformDamageTrace()
 		Character,
 		Start,
 		End,
-		DamageTraceRadius,
+		DamageTraceRadius * AttackSpeed,
 		UEngineTypes::ConvertToTraceType(DamageTraceChannel),
 		false,
 		ActorsToIgnore,
