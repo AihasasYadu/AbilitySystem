@@ -86,7 +86,6 @@ void ULeapSlam::OnLeapFailed(FVector Destination)
 void ULeapSlam::OnHitDelayFinished()
 {
 	bDamageWindowTriggered = true;
-	PerformDamageTrace();
 
 	if (!bWaitForLandingBeforeEnding)
 	{
@@ -107,6 +106,7 @@ void ULeapSlam::OnHitDelayFinished()
 void ULeapSlam::OnCharacterLanded(const FHitResult& Hit)
 {
 	bHasLanded = true;
+	PerformDamageTrace();
 
 	ACharacter* Character = Cast<ACharacter>(GetAvatarActorFromActorInfo());
 	if (Character && Character->GetCharacterMovement())
@@ -150,9 +150,12 @@ void ULeapSlam::PerformDamageTrace()
 		UEngineTypes::ConvertToTraceType(DamageTraceChannel),
 		false,
 		ActorsToIgnore,
-		EDrawDebugTrace::None,
+		EDrawDebugTrace::ForDuration,
 		Hits,
-		true
+		true,
+		FLinearColor::Red,              // Trace color
+		FLinearColor::Green,            // Hit color
+		2.0f
 	);
 
 	if (!bHit)
