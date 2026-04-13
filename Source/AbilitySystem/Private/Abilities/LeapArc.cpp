@@ -11,16 +11,12 @@ ULeapArc* ULeapArc::LeapCharacterInArc(
 	FName TaskInstanceName,
 	float InLeapDistance,
 	float InZOffset,
-	float InArc,
-	bool bInUseMovementInput,
-	bool bInRotateToDirection)
+	float InArc)
 {
 	ULeapArc* Task = NewAbilityTask<ULeapArc>(OwningAbility, TaskInstanceName);
 	Task->LeapDistance = InLeapDistance;
 	Task->ZOffset = InZOffset;
 	Task->Arc = InArc;
-	Task->bUseMovementInput = bInUseMovementInput;
-	Task->bRotateToDirection = bInRotateToDirection;
 	return Task;
 }
 
@@ -47,11 +43,6 @@ void ULeapArc::Activate()
 
 	Direction.Z = 0.f;
 	Direction = Direction.GetSafeNormal();
-
-	if (bRotateToDirection)
-	{
-		Character->SetActorRotation(Direction.Rotation());
-	}
 
 	const FVector Start = Character->GetActorLocation();
 	FVector Destination = Start + Direction * LeapDistance;
@@ -93,11 +84,6 @@ FVector ULeapArc::ResolveLeapDirection() const
 	if (!Character)
 	{
 		return FVector::ZeroVector;
-	}
-
-	if (!bUseMovementInput)
-	{
-		return Character->GetActorForwardVector();
 	}
 
 	AController* Controller = Character->GetController();

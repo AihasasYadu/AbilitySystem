@@ -58,12 +58,6 @@ protected:
 	TEnumAsByte<ECollisionChannel> DamageTraceChannel = ECC_Pawn;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Leap Attack")
-	bool bUseMovementInput = true;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Leap Attack")
-	bool bRotateToDirection = true;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Leap Attack")
 	bool bWaitForLandingBeforeEnding = true;
 
 	UFUNCTION()

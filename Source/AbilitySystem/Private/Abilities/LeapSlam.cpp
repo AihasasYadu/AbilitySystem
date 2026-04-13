@@ -61,9 +61,7 @@ void ULeapSlam::StartLeap()
 		TEXT("LeapCharacter"),
 		LeapDistance,
 		LeapZOffset,
-		LeapArc,
-		bUseMovementInput,
-		bRotateToDirection
+		LeapArc
 	);
 
 	LeapTask->OnLaunched.AddDynamic(this, &ULeapSlam::OnLeapLaunched);

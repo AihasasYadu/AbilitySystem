@@ -26,9 +26,7 @@ public:
 		FName TaskInstanceName,
 		float LeapDistance,
 		float ZOffset,
-		float Arc,
-		bool bUseMovementInput,
-		bool bRotateToDirection);
+		float Arc);
 
 	virtual void Activate() override;
 
@@ -36,8 +34,6 @@ private:
 	float LeapDistance = 700.f;
 	float ZOffset = 100.f;
 	float Arc = 0.5f;
-	bool bUseMovementInput = true;
-	bool bRotateToDirection = true;
 
 	FVector ResolveLeapDirection() const;
 };
