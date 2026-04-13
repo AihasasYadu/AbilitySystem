@@ -135,8 +135,9 @@ void ULeapSlam::PerformDamageTrace()
 	}
 	
 	const float AttackSpeed = Character->GetAttributeSet()->GetAttackSpeed();
+	const float MaxAttackSpeed = Character->GetAttributeSet()->GetMaxAttackSpeed();
 	const FVector Start = Character->GetActorLocation() + Character->GetActorForwardVector() * 60.f + FVector(0.f, 0.f, 50.f);
-	const FVector End = Start + Character->GetActorForwardVector() * DamageTraceLength * AttackSpeed;
+	const FVector End = Start + Character->GetActorForwardVector() * DamageTraceLength * (AttackSpeed/MaxAttackSpeed);
 
 	TArray<FHitResult> Hits;
 	TArray<AActor*> ActorsToIgnore;
@@ -146,7 +147,7 @@ void ULeapSlam::PerformDamageTrace()
 		Character,
 		Start,
 		End,
-		DamageTraceRadius * AttackSpeed,
+		DamageTraceRadius * (AttackSpeed/MaxAttackSpeed),
 		UEngineTypes::ConvertToTraceType(DamageTraceChannel),
 		false,
 		ActorsToIgnore,
